@@ -76,9 +76,8 @@ print "Extracting the top %d eigenfaces from %d faces" % (n_components, X_train.
 t0 = time()
 pca = RandomizedPCA(n_components=n_components, whiten=True).fit(X_train)
 print "done in %0.3fs" % (time() - t0)
-
+print pca.explained_variance_ratio_ #tells how much variance explained
 eigenfaces = pca.components_.reshape((n_components, h, w))
-
 print "Projecting the input data on the eigenfaces orthonormal basis"
 t0 = time()
 X_train_pca = pca.transform(X_train)
@@ -100,8 +99,6 @@ clf = clf.fit(X_train_pca, y_train)
 print "done in %0.3fs" % (time() - t0)
 print "Best estimator found by grid search:"
 print clf.best_estimator_
-
-
 ###############################################################################
 # Quantitative evaluation of the model quality on the test set
 

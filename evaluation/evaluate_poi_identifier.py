@@ -26,7 +26,41 @@ data = featureFormat(data_dict, features_list)
 labels, features = targetFeatureSplit(data)
 
 
+from sklearn.cross_validation import train_test_split
+features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3, random_state=42)
+#this step splits the data into training and testing data
 
-### your code goes here 
+
+### it's all yours from here forward!  
+from sklearn.tree import DecisionTreeClassifier
+clf = DecisionTreeClassifier() #make our tree classifier
+clf.fit(features_train, labels_train) #fit it with the data
+pred = clf.predict(features_test) #make predictions
+
+#this step counts the number of true positives for precision and recall calculations
+true_positives = 0 #counts number of times we guess poi and they were a poi
+for i in range(0, len(pred)):
+    if pred[i] == labels_test[i]:
+        if pred[i] == 1. :
+            true_positives = true_positives + 1
+print true_positives
+
+positives = 0 #counts number of times we predicted a poi
+for i in range(0, len(pred)):
+    if pred[i] == 1.:
+        positives += 1
+print positives
+
+true_negatives = 0
+for i in range(0, len(pred)):
+    if pred[i] != labels_test[i]:
+        if pred[i] == 1:
+            true_negatives += 1
+print true_negatives
+#seeing the accuracy
+from sklearn.metrics import accuracy_score
+print accuracy_score(labels_test, pred) #see the accuracy
+
+
 
 

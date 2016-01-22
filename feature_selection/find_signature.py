@@ -6,8 +6,8 @@ numpy.random.seed(42)
 
 
 ### the words (features) and authors (labels), already largely processed
-words_file = "word_data.pkl" ### you made this in previous mini-project
-authors_file = "email_authors.pkl"  ### this too
+words_file = "C:/Users/Kenneth/Desktop/Udacity/Intro_to_Machine_Learning/projects/ud120-projects/text_learning/your_word_data.pkl" ### you made this in previous mini-project
+authors_file = "C:/Users/Kenneth/Desktop/Udacity/Intro_to_Machine_Learning/projects/ud421-projects/text_learning/your_email_authors.pkl"  ### this too
 word_data = pickle.load( open(words_file, "r"))
 authors = pickle.load( open(authors_file, "r") )
 
@@ -24,7 +24,7 @@ vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.5,
 features_train = vectorizer.fit_transform(features_train).toarray()
 features_test  = vectorizer.transform(features_test).toarray()
 
-
+print len(features_train)
 ### a classic way to overfit is to use a small number
 ### of data points and a large number of features
 ### train on only 150 events to put ourselves in this regime
@@ -34,6 +34,14 @@ labels_train   = labels_train[:150]
 
 
 ### your code goes here
+from sklearn import tree
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(features_train, labels_train)
+pred = clf.predict(features_test)
 
+from sklearn.metrics import accuracy_score #to find the accuracy
+print accuracy_score(labels_test, pred)
 
-
+print numpy.argmax(clf.feature_importances_)
+print max(clf.feature_importances_)
+print vectorizer.get_feature_names()[21323]
