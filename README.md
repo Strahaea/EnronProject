@@ -4,7 +4,7 @@ In these folders and for the project I make use of various Machine learning libr
 as techniques such as:
 - feature selection, scaling, and pca
 - regressions and outlier detection
-- svms, decision_trees, clustering
+- svms, decision trees, clustering
 - use of training and testing sets
 
 All the other folders are more or less complete but I am currently in the early stages of work on the final project. The goal of the final project is to apply machine learning techniques to the Enron Dataset: https://en.wikipedia.org/wiki/Enron_Corpus to see if its possible to predict whether or not people were involved in the Enron fraud based on the data.
