@@ -38,9 +38,14 @@ data = featureFormat(my_dataset, features_list)
 ### be first in features_list
 labels, features = targetFeatureSplit(data)
 
+#Feature scaling to improve accuracy
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+rescaled_features = scaler.fit_transform(features) #applies formula to data
+
 #break labels and features into training and testing sets
 from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3, random_state=42)
+features_train, features_test, labels_train, labels_test = train_test_split(rescaled_features, labels, test_size=0.3, random_state=42)
 
 
 #Basic plan to find persons of interest:
@@ -48,12 +53,13 @@ features_train, features_test, labels_train, labels_test = train_test_split(feat
 #Select Features (outlier removal here?) - Lesson 11
 
 
+
 #Run a PCA which will compress the features
 
 
 #Remove outlier at some point (earlier?)
 
-#Run Decision Tree, using 
+#Run Decision Tree
 from sklearn import tree
 clf = tree.DecisionTreeClassifier(min_samples_split=40) #make the classifier
 clf = clf.fit(features_train, labels_train)
@@ -75,7 +81,7 @@ had an 86% accuracy with other doing 90% and expenses doing 10%
 when these were removed and the feature importances were checked again
   
 """
-#Do Validation and find accuracy
+#Find accuracy
 from sklearn.metrics import accuracy_score #now that we have our prediction see how accurate it is
 accuracy = accuracy_score(pred, labels_test)
 print accuracy
@@ -84,8 +90,8 @@ print accuracy
 
 
 
-### dump your classifier, dataset and features_list so 
-### anyone can run/check your results
+### dump classifier, dataset and features_list so 
+### anyone can run/check results
 pickle.dump(clf, open("my_classifier.pkl", "w") )
 pickle.dump(data_dict, open("my_dataset.pkl", "w") )
 pickle.dump(features_list, open("my_feature_list.pkl", "w") )
