@@ -17,11 +17,7 @@ from feature_format import targetFeatureSplit
 #
 #incomplete feature list, oversized now til more selection is done
 
-features_list = ["poi", "salary", "to_messages", "deferral_payments", "total_payments",
-                 "exercised_stock_options", "bonus", "restricted_stock", 
-                 "shared_receipt_with_poi", "restricted_stock_deferred", "total_stock_value",
-                 "expenses", "loan_advances", "from_messages", "from_this_person_to_poi",
-                 "director_fees", "deferred_income", "long_term_incentive", "from_poi_to_this_person"]
+features_list = ["poi",  "from_messages", "restricted_stock_deferred", "director_fees" ]
 
 
 
@@ -49,9 +45,9 @@ plt.pyplot.ylabel("bonus")
 plt.pyplot.show()
 """
 
-### New Features
+### New Features to be added later
 
-my_dataset = data_dict #rename the data dictionary
+my_dataset = data_dict #rename the data dictionary for new features
 
 ### these two lines extract the features specified in features_list
 ### and extract them from data_dict, returning a numpy array
@@ -62,27 +58,20 @@ data = featureFormat(my_dataset, features_list)
 ### be first in features_list
 labels, features = targetFeatureSplit(data)
 
-#Feature scaling to improve accuracy
+#Feature scaling to improve accuracy, currently not implemented due to issue with predictor
+"""
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 rescaled_features = scaler.fit_transform(np.array(features)) #rescales data
-
+"""
 
 #break labels and features into training and testing sets
 from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3, random_state=42)
-
-
-#Basic plan to find persons of interest:
-
-#Select Features (outlier removal here?) - Lesson 11
-
+features_train, features_test, labels_train, labels_test = train_test_split(rescaled_features, labels, test_size=0.3, random_state=42)
 
 
 #Run a PCA which will compress the features
 
-
-#Remove outlier at some point (earlier?)
 
 #Run Decision Tree
 from sklearn import tree
@@ -91,29 +80,30 @@ clf = clf.fit(features_train, labels_train)
 pred = clf.predict(features_test)
 
 #Playing with features to see which to use/feature selection
-#print clf.feature_importances_
-#print np.argmax(clf.feature_importances_)
-#print features_list[11] #because shifted over 1 because no poi
+print clf.feature_importances_
+best_feature_pos = np.argmax(clf.feature_importances_)
+print features_list[best_feature_pos +1] #This will be the name of the most important feature, +1 cause no poi
 
 """
-when run with this feature list
-features_list = ["poi", "salary", "to_messages", "deferral_payments", "total_payments",
-                 "exercised_stock_options", "bonus", "restricted_stock", 
-                 "shared_receipt_with_poi", "restricted_stock_deferred", "total_stock_value",
-                 "expenses", "loan_advances", "from_messages", "other", "from_this_person_to_poi",
-                 "director_fees", "deferred_income", "long_term_incentive", "from_poi_to_this_person"]
-had an 86% accuracy with other doing 90% and expenses doing 10% 
-when these were removed and the feature importances were checked again
-  
+#Keeping track of best features, features importance in order is:
+"expenses",  "salary","restricted_stock", "total_stock_value", "bonus", "exercised_stock_options", 
+"shared_receipt_with_poi",  "long_term_incentive","total_payments", "from_this_person_to_poi",
+"loan_advances","deferred_income", "deferral_payments", "to_messages",  "from_messages", 
+"restricted_stock_deferred", "director_fees"
+
+#Noticed getting a signicantly higher accuracy with from_messages, director_fees, and restriced_stock_deferred
+#94% accuracy with those
 """
 #Find accuracy
 from sklearn.metrics import accuracy_score #now that we have our prediction see how accurate it is
 accuracy = accuracy_score(pred, labels_test)
-print accuracy
+print accuracy #Note if some people who are persons of interest got away we shouldn't expect 100% accuracy
 
-
-
-
+"""
+Now Using our Classifier see if there are any persons of interest,
+while not initially given as such, who are identified as such by
+our classifier, print their names
+"""
 
 ### dump classifier, dataset and features_list so 
 ### anyone can run/check results
