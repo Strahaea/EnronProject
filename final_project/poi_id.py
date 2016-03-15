@@ -1,4 +1,7 @@
 #!/usr/bin/python
+"""
+Analyzes the Enron dataset to find perons of interest
+"""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,9 +28,29 @@ features_list = ["poi", "salary", "to_messages", "deferral_payments", "total_pay
 data_dict = pickle.load(open("final_project_dataset.pkl", "r") )
 
 
-### if you are creating any new features, you might want to do that here
-### store to my_dataset for easy export below
-my_dataset = data_dict
+### Outlier Removal
+"""
+Found an extreme outlier, the total salaries, in salary and removed it
+as it was not represenative of the data, after removal all points appear valid
+"""
+del data_dict["TOTAL"]
+
+"""
+Graph to check for outliers
+
+for point in data_dict:
+    person_info = data_dict[point]
+    salary = person_info["salary"]
+    bonus = person_info["bonus"]
+    plt.scatter( salary, bonus )
+plt.xlabel("salary")
+plt.pyplot.ylabel("bonus")
+plt.pyplot.show()
+"""
+
+### New Features
+
+my_dataset = data_dict #rename the data dictionary
 
 ### these two lines extract the features specified in features_list
 ### and extract them from data_dict, returning a numpy array
@@ -41,7 +64,9 @@ labels, features = targetFeatureSplit(data)
 #Feature scaling to improve accuracy
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
-rescaled_features = scaler.fit_transform(features) #applies formula to data
+rescaled_features = scaler.fit_transform(np.array([features])) #applies formula to data
+
+print rescaled_features
 
 #break labels and features into training and testing sets
 from sklearn.cross_validation import train_test_split
