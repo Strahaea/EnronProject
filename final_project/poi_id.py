@@ -16,6 +16,7 @@ from feature_format import targetFeatureSplit
 ### first feature must be "poi", as this will be singled out as the label
 #
 #incomplete feature list, oversized now til more selection is done
+
 features_list = ["poi", "salary", "to_messages", "deferral_payments", "total_payments",
                  "exercised_stock_options", "bonus", "restricted_stock", 
                  "shared_receipt_with_poi", "restricted_stock_deferred", "total_stock_value",
@@ -64,13 +65,12 @@ labels, features = targetFeatureSplit(data)
 #Feature scaling to improve accuracy
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
-rescaled_features = scaler.fit_transform(np.array([features])) #applies formula to data
+rescaled_features = scaler.fit_transform(np.array(features)) #rescales data
 
-print rescaled_features
 
 #break labels and features into training and testing sets
 from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = train_test_split(rescaled_features, labels, test_size=0.3, random_state=42)
+features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3, random_state=42)
 
 
 #Basic plan to find persons of interest:
@@ -91,9 +91,9 @@ clf = clf.fit(features_train, labels_train)
 pred = clf.predict(features_test)
 
 #Playing with features to see which to use/feature selection
-print clf.feature_importances_
-print np.argmax(clf.feature_importances_)
-print features_list[11] #because shifted over 1 because no poi
+#print clf.feature_importances_
+#print np.argmax(clf.feature_importances_)
+#print features_list[11] #because shifted over 1 because no poi
 
 """
 when run with this feature list
